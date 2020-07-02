@@ -1,6 +1,6 @@
 ### ECK Upgrades with Helm
 
-This is a repo designed to test deploying the ECK operator with CRD definitions, and then upgrading the CRDs in the Helm chart. We start with the 1.0.0-beta release and upgrade to the 1.1.2 release.
+This is a repo designed to test deploying the ECK operator with CRD definitions, and then upgrading the CRDs in the Helm chart. We start with the 1.0.0-beta release and upgrade to the 1.1.2 release. It includes the all in one and the ES quickstart.
 
 ### Testing
 
@@ -19,6 +19,17 @@ Switch to the 112 branch.
 ```
 helm upgrade test .
 ```
+
+### Outcome
+
+The CRDs are not upgraded because Helm does not support upgrading CRDs. This also causes the v1 ES resource to fail with:
+
+>Error: UPGRADE FAILED: unable to recognize "": no matches for kind "Elasticsearch" in version "elasticsearch.k8s.elastic.co/v1"
+
+From the Helm docs:
+>There is no support at this time for upgrading or deleting CRDs using Helm. This was an explicit decision after much community discussion due to the danger for unintentional data loss. Furthermore, there is currently no community consensus around how to handle CRDs and their lifecycle.
+
+I think this may be worked around by moving the CRDs from the `crds` directory and just treating them like a regular template, but would need to do more research on if other projects do that and if there would be other unforeseen issues.
 
 ### Cleanup
 
