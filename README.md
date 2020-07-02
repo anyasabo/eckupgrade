@@ -24,6 +24,8 @@ helm upgrade test .
 
 #### Going from `beta` to `112`:
 
+This branch uses the ["Method 1"](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/#method-1-let-helm-do-it-for-you) Helm recommended way to install CRDs, using the `crds` directory. 
+
 The CRDs are not upgraded because Helm does not support upgrading CRDs. This also causes the v1 ES resource to fail with:
 
 >Error: UPGRADE FAILED: unable to recognize "": no matches for kind "Elasticsearch" in version "elasticsearch.k8s.elastic.co/v1"
@@ -44,7 +46,7 @@ because the CRD is not installed before the ES resource. This likely is not a pr
 
 #### Going from `beta-template-crds-no-es` to `112-template-crds-no-es`
 
-For this I removed the Elasticsearch resource from the chart (which is most similar to our all-in-one.yaml). This approach seems to work as expected. The CRDs and operator are installed and upgraded as expected. This seems to be the only viable option. I'm not sure it is something we *should* do though.
+For this I removed the Elasticsearch resource from the chart (which is most similar to our all-in-one.yaml). This approach seems to work as expected. The CRDs and operator are installed and upgraded as expected. This seems to be the only viable option. I'm not sure it is something we *should* do though. This is their suggested [method 2](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/#method-2-separate-charts) for charts with CRDs, so I think it would be okay.
 
 
 ### Cleanup
