@@ -46,7 +46,7 @@ because the CRD is not installed before the ES resource. This likely is not a pr
 
 #### Going from `beta-template-crds-no-es` to `112-template-crds-no-es`
 
-For this I removed the Elasticsearch resource from the chart (which is most similar to our all-in-one.yaml). This approach seems to work as expected. The CRDs and operator are installed and upgraded as expected. This seems to be the only viable option. I'm not sure it is something we *should* do though. This is their suggested [method 2](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/#method-2-separate-charts) for charts with CRDs, so I think it would be okay.
+For this I removed the Elasticsearch resource from the chart (which is most similar to our all-in-one.yaml). This approach seems to work as expected. The CRDs and operator are installed and upgraded as expected. This seems to be the only viable option. I'm not sure it is something we *should* do though. This is their suggested [method 2](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/#method-2-separate-charts) for charts with CRDs, so I think it would be okay. We can just only install the operator + CRDs in one chart. People wanting to install CRs would need to use a separate chart that is installed after the operator + CRD chart.
 
 
 ### Cleanup
