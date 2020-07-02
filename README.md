@@ -49,6 +49,10 @@ because the CRD is not installed before the ES resource. This likely is not a pr
 For this I removed the Elasticsearch resource from the chart (which is most similar to our all-in-one.yaml). This approach seems to work as expected. The CRDs and operator are installed and upgraded as expected. This seems to be the only viable option. I'm not sure it is something we *should* do though. This is their suggested [method 2](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/#method-2-separate-charts) for charts with CRDs, so I think it would be okay. We can just only install the operator + CRDs in one chart. People wanting to install CRs would need to use a separate chart that is installed after the operator + CRD chart.
 
 
+### Tests remaining
+
+v1beta1 CRDs themselves are deprecated in k8s 1.16 and are being removed in the near future (looks like it recently changed to [1.22](https://github.com/kubernetes/kubernetes/pull/92220/files)). We should test that upgrading the API version of resources works as expected so we are prepared for that.
+
 ### Cleanup
 
 ```
