@@ -20,7 +20,9 @@ Switch to the 112 branch.
 helm upgrade test .
 ```
 
-### Outcome
+### Test Outcomes
+
+#### Going from `beta` to `112`:
 
 The CRDs are not upgraded because Helm does not support upgrading CRDs. This also causes the v1 ES resource to fail with:
 
@@ -29,7 +31,19 @@ The CRDs are not upgraded because Helm does not support upgrading CRDs. This als
 From the Helm docs:
 >There is no support at this time for upgrading or deleting CRDs using Helm. This was an explicit decision after much community discussion due to the danger for unintentional data loss. Furthermore, there is currently no community consensus around how to handle CRDs and their lifecycle.
 
-I think this may be worked around by moving the CRDs from the `crds` directory and just treating them like a regular template, but would need to do more research on if other projects do that and if there would be other unforeseen issues.
+### Going from `beta-template-crds` to `112-template-crds`
+
+I thought maybe if we did not use the special CRD handling Helm has (and just template them like regular resources), it might work, but forgot that there is an order of operations. But you receive:
+
+>$ helm install test .
+Error: unable to build kubernetes objects from release manifest: unable to recognize "": no matches for kind "Elasticsearch" in version "elasticsearch.k8s.elastic.co/v1beta1"
+
+Because the CRD is not installed before the ES resource. This likely is not a problem for installing just the operator, which led to the next test.
+
+### Going from `beta-template-crds-no-es` to `112-template-crds-no-es`
+
+For this I removed the Elasticsearch resource from the chart (which is most similar to our all-in-one.yaml). This approach seems to work as expected. The CRDs and operator are installed and upgraded as expected. This seems to be the only viable option.
+
 
 ### Cleanup
 
