@@ -35,8 +35,10 @@ From the [Helm docs](https://helm.sh/docs/chart_best_practices/custom_resource_d
 
 I thought maybe if we did not use the special CRD handling Helm has (and just template them like regular resources), it might work, but forgot that there is a necessary order of operations. So you receive:
 
->$ helm install test .
+```
+$ helm install test .
 Error: unable to build kubernetes objects from release manifest: unable to recognize "": no matches for kind "Elasticsearch" in version "elasticsearch.k8s.elastic.co/v1beta1"
+```
 
 because the CRD is not installed before the ES resource. This likely is not a problem for installing just the operator, which led to the next test.
 
