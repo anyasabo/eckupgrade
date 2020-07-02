@@ -4,6 +4,8 @@ kind: CustomResourceDefinition
 metadata:
   creationTimestamp: null
   name: kibanas.kibana.k8s.elastic.co
+  labels:
+    {{- include "eckupgrade.labels" . | nindent 4 }}
 spec:
   additionalPrinterColumns:
   - JSONPath: .status.health

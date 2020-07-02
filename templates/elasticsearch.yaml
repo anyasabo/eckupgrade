@@ -4,6 +4,8 @@ kind: CustomResourceDefinition
 metadata:
   creationTimestamp: null
   name: elasticsearches.elasticsearch.k8s.elastic.co
+  labels:
+    {{- include "eckupgrade.labels" . | nindent 4 }}
 spec:
   additionalPrinterColumns:
   - JSONPath: .status.health
