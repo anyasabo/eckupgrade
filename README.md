@@ -36,9 +36,7 @@ I think this may be worked around by moving the CRDs from the `crds` directory a
 ```
 helm uninstall test
 kubectl delete crd apmservers.apm.k8s.elastic.co
-kubectl delete crd beats.beat.k8s.elastic.co
 kubectl delete crd elasticsearches.elasticsearch.k8s.elastic.co
-kubectl delete crd enterprisesearches.enterprisesearch.k8s.elastic.co
 kubectl delete crd kibanas.kibana.k8s.elastic.co
 ```
 
