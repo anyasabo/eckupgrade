@@ -48,10 +48,17 @@ because the CRD is not installed before the ES resource. This likely is not a pr
 
 For this I removed the Elasticsearch resource from the chart (which is most similar to our all-in-one.yaml). This approach seems to work as expected. The CRDs and operator are installed and upgraded as expected. This seems to be the only viable option. I'm not sure it is something we *should* do though. This is their suggested [method 2](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/#method-2-separate-charts) for charts with CRDs, so I think it would be okay. We can just only install the operator + CRDs in one chart. People wanting to install CRs would need to use a separate chart that is installed after the operator + CRD chart.
 
+#### Going from `beta-es` to `112-es`
 
-### Tests remaining
+For this I tried a chart with just a v1beta1 Elasticsearch resource, and then upgrading the chart to just a v1 Elasticsearch resource. It worked as expected.
 
-v1beta1 CRDs themselves are deprecated in k8s 1.16 and are being removed in the near future (looks like it recently changed to [1.22](https://github.com/kubernetes/kubernetes/pull/92220/files)). We should test that upgrading the API version of resources works as expected so we are prepared for that.
+
+### Conclusion
+
+We could support two separate charts if we wanted. One chart to install the CRDs and the operator, another to install stack resources. There is not a viable way to have one chart for both.
+
+It will still be a pain to support cluster-wide, single namespace, and multi-namespace deployments in one chart, but I think that is true no matter what deployment method we choose.
+
 
 ### Cleanup
 
@@ -76,4 +83,7 @@ meta.helm.sh/release-name: {{ .Release.Name }}
 meta.helm.sh/release-namespace: {{ .Release.Namespace }}
 ```
 
-to the default labels, making sure all resources had these labels, and using the release namespace of the hardcoded `elastic-system` namespace.
+to the default labels, making sure all resources had these labels, and using the release namespace of the hardcoded `elastic-system` namespace. Looking at it further I think those `meta` annotations actually may be added by Helm by default and we do not need to set them manually.
+
+
+v1beta1 CRDs themselves are deprecated in k8s 1.16 and are being removed in the near future (looks like it recently changed to [1.22](https://github.com/kubernetes/kubernetes/pull/92220/files)). This should work fine though as the patch works with CRD and was designed to work around the Deployments group change.
